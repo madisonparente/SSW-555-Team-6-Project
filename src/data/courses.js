@@ -1,0 +1,48 @@
+const INITIAL_COURSES = [
+  {
+    id: 1,
+    name: "Intro to Computer Science",
+    code: "CS101",
+    teacher: "Dr. Smith",
+    meetLink: "https://meet.google.com/abc-defg-hij",
+    color: "#6366f1",
+    schedule: "Mon/Wed 10:00 AM",
+    students: 28,
+    announcements: ["Midterm moved to March 15", "Lab 3 due Friday"],
+  },
+  {
+    id: 2,
+    name: "Calculus II",
+    code: "MATH201",
+    teacher: "Prof. Johnson",
+    meetLink: "https://meet.google.com/klm-nopq-rst",
+    color: "#ec4899",
+    schedule: "Tue/Thu 1:00 PM",
+    students: 35,
+    announcements: ["Chapter 7 homework posted"],
+  },
+  {
+    id: 3,
+    name: "World History",
+    code: "HIST110",
+    teacher: "Dr. Garcia",
+    meetLink: "https://meet.google.com/uvw-xyza-bcd",
+    color: "#f59e0b",
+    schedule: "Mon/Wed/Fri 9:00 AM",
+    students: 42,
+    announcements: [],
+  },
+  {
+    id: 4,
+    name: "Organic Chemistry",
+    code: "CHEM301",
+    teacher: "Prof. Lee",
+    meetLink: "https://meet.google.com/efg-hijk-lmn",
+    color: "#10b981",
+    schedule: "Tue/Thu 3:00 PM",
+    students: 22,
+    announcements: ["Lab safety quiz Monday", "Office hours moved to 4 PM"],
+  },
+];
+
+export default INITIAL_COURSES;
