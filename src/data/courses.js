@@ -9,6 +9,7 @@ const INITIAL_COURSES = [
     schedule: "Mon/Wed 10:00 AM",
     students: 28,
     announcements: ["Midterm moved to March 15", "Lab 3 due Friday"],
+    files: [],
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const INITIAL_COURSES = [
     schedule: "Tue/Thu 1:00 PM",
     students: 35,
     announcements: ["Chapter 7 homework posted"],
+    files: [],
   },
   {
     id: 3,
@@ -31,6 +33,7 @@ const INITIAL_COURSES = [
     schedule: "Mon/Wed/Fri 9:00 AM",
     students: 42,
     announcements: [],
+    files: [],
   },
   {
     id: 4,
@@ -42,6 +45,7 @@ const INITIAL_COURSES = [
     schedule: "Tue/Thu 3:00 PM",
     students: 22,
     announcements: ["Lab safety quiz Monday", "Office hours moved to 4 PM"],
+    files: [],
   },
 ];
 
