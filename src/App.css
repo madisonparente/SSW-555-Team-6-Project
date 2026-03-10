@@ -917,3 +917,44 @@ body {
   font-size: 13px;
   margin-top: 8px;
 }
+
+/* Office Hour Calendar Highlights */
+.calendar-day.office-hour-day {
+  background-color: rgba(139, 92, 246, 0.15) !important; /* Subtle purple background */
+  border: 1px solid rgba(139, 92, 246, 0.4) !important; /* Light purple border */
+}
+
+.calendar-day.office-hour-day:hover {
+  background-color: rgba(139, 92, 246, 0.25) !important;
+}
+
+/* The Schedule Button in the Modal and Sidebar */
+.schedule-btn {
+  display: block;
+  text-align: center;
+  background-color: #8b5cf6; /* Primary purple */
+  color: #ffffff !important;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 12px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.schedule-btn:hover {
+  background-color: #7c3aed; /* Darker purple on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Adjusting the sidebar meet-link for office hours */
+.event-details .meet-link.schedule-link {
+  color: #a78bfa;
+}
+
+.event-details .meet-link.schedule-link:hover {
+  color: #c4b5fd;
+}

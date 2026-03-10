@@ -66,7 +66,7 @@ const CalendarView = ({ events, onBack }) => {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
     const days = [];
-
+    
     // Empty cells for days before month starts
     for (let i = 0; i < firstDay; i++) {
       days.push(
@@ -81,12 +81,14 @@ const CalendarView = ({ events, onBack }) => {
       const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
       const dateEvents = getEventsForDate(date);
       const hasEvents = dateEvents.length > 0;
+      const hasOfficeHours = dateEvents.some(e => e.type === "office-hours");
       const isSelected = selectedDate && selectedDate.toDateString() === date.toDateString();
+
 
       days.push(
         <div
           key={day}
-          className={`calendar-day ${hasEvents ? "has-events" : ""} ${isSelected ? "selected" : ""}`}
+          className={`calendar-day ${hasEvents ? "has-events" : ""} ${isSelected ? "selected" : ""} ${hasOfficeHours ? "office-hour-day" : ""}`}
           onClick={() => setSelectedDate(date)}
         >
           <div className="day-number">{day}</div>
@@ -106,6 +108,7 @@ const CalendarView = ({ events, onBack }) => {
         return "#10b981";
       case "deadline":
         return "#ef4444";
+      case "office-hours": return "#8b5cf6";
       default:
         return "#6b7280";
     }
@@ -119,6 +122,7 @@ const CalendarView = ({ events, onBack }) => {
         return "Tutoring";
       case "deadline":
         return "Deadline";
+      case "office-hours": return "Office Hours";
       default:
         return type;
     }
@@ -173,6 +177,12 @@ const CalendarView = ({ events, onBack }) => {
             >
               Deadlines
             </button>
+            <button
+              className={`filter-btn ${selectedFilter === "office-hours" ? "active" : ""}`}
+              onClick={() => setSelectedFilter("office-hours")}
+            >
+              Office Hours
+            </button>
           </div>
 
           <div className="calendar-grid">
@@ -198,6 +208,10 @@ const CalendarView = ({ events, onBack }) => {
             <div className="legend-item">
               <div className="legend-color" style={{ backgroundColor: "#ef4444" }}></div>
               <span>Assignment Deadline</span>
+            </div>
+            <div className="legend-item">
+              <div className="legend-color" style={{ backgroundColor: "#8b5cf6" }}></div>
+              <span>Office Hours</span>
             </div>
           </div>
         </div>
@@ -252,6 +266,21 @@ const CalendarView = ({ events, onBack }) => {
                       <div className="event-details">
                         <div>⏰ Due: {event.dueTime}</div>
                         <div>📄 {event.description}</div>
+                      </div>
+                    )}
+                    {event.type === "office-hours" && (
+                      <div className="event-details">
+                        <div>🕐 {event.startTime} - {event.endTime}</div>
+                        <div>📍 {event.location}</div>
+                        <a 
+                          href={event.meetLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="meet-link" 
+                          style={{ color: '#8b5cf6' }}
+                        >
+                          📅 Schedule Session →
+                        </a>
                       </div>
                     )}
                   </div>
@@ -319,6 +348,32 @@ const CalendarView = ({ events, onBack }) => {
                           <div>⏰ <strong>Due:</strong> {event.dueTime}</div>
                           <div>📝 <strong>{event.courseName}</strong></div>
                           <div>📄 {event.description}</div>
+                        </div>
+                      )} 
+                      
+                      {event.type === "office-hours" && (
+                        <div className="event-details">
+                          <div>🕐 <strong>{event.startTime} - {event.endTime}</strong></div>
+                          <div>📍 <strong>{event.location}</strong></div>
+                          <div>👨‍🏫 <strong>Instructor:</strong> {event.instructor}</div>
+                          <div style={{ marginTop: '10px' }}>
+                            <a 
+                              href={event.meetLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="schedule-btn"
+                              style={{
+                                display: 'block',
+                                textAlign: 'center',
+                                backgroundColor: '#8b5cf6',
+                                color: 'white',
+                                padding: '8px',
+                                borderRadius: '6px',
+                                textDecoration: 'none',
+                                fontWeight: 'bold'
+                              }}
+                            ></a>
+                          </div>
                         </div>
                       )}
                     </div>

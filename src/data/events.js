@@ -1,4 +1,5 @@
 const EVENTS = [
+  
   // Class Sessions
   {
     id: 1,
@@ -251,4 +252,33 @@ const EVENTS = [
   },
 ];
 
+//Added Office Hour Scheduling
+const generateDrSmithOfficeHours = (month, year) => {
+  const officeHours = [];
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const dayOfWeek = date.getDay(); 
+    if ([1, 3, 5].includes(dayOfWeek)) {
+      const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      officeHours.push({
+        id: `dr-smith-oh-${dateString}`,
+        courseName: "Office Hours",
+        courseCode: "OFFICE",
+        type: "office-hours",
+        title: "Office Hours - Dr. Smith",
+        date: dateString,
+        startTime: "3:00 PM",
+        endTime: "6:00 PM",
+        location: "Room 302 / Zoom",
+        instructor: "Dr. Smith",
+        meetLink: "https://calendly.com/dr-smith/office-hours",
+        description: "Schedule a time block for project review or course questions."
+      });
+    }
+  }
+  return officeHours;
+};
+
+EVENTS.push(...generateDrSmithOfficeHours(2, 2026));
 export default EVENTS;
