@@ -2,7 +2,7 @@ import React from "react";
 
 import USERS from "../data/users";
 
-const Header = ({ role, setRole }) => {
+const Header = ({ role, setRole, onCalendarClick, showCalendar }) => {
   const user = USERS[role];
 
   return (
@@ -12,6 +12,15 @@ const Header = ({ role, setRole }) => {
         <span className="logo-text">ClassRoom</span>
       </div>
       <div className="header-right">
+        {role === "student" && (
+          <button
+            className={`calendar-nav-btn ${showCalendar ? "active" : ""}`}
+            onClick={onCalendarClick}
+            title="View calendar"
+          >
+            📅 Calendar
+          </button>
+        )}
         <div className="role-toggle">
           {["student", "teacher"].map((r) => (
             <button

@@ -3,8 +3,10 @@ import Header from "./components/Header";
 import CourseCard from "./components/CourseCard";
 import CourseDetail from "./components/CourseDetail";
 import NewCourseForm from "./components/NewCourseForm";
+import CalendarView from "./components/CalendarView";
 import INITIAL_COURSES from "./data/courses";
 import USERS from "./data/users";
+import EVENTS from "./data/events";
 import "./App.css";
 
 export default function App() {
@@ -12,6 +14,7 @@ export default function App() {
   const [courses, setCourses] = useState(INITIAL_COURSES);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showNewCourse, setShowNewCourse] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
   const [newCourse, setNewCourse] = useState({
     name: "",
     code: "",
@@ -24,6 +27,16 @@ export default function App() {
     (sum, c) => sum + c.announcements.length,
     0,
   );
+
+  const handleRoleChange = (newRole) => {
+    setRole(newRole);
+    setShowCalendar(false); // Close calendar when switching roles
+  };
+
+  const handleCalendarClick = () => {
+    setShowCalendar(!showCalendar);
+    setSelectedCourse(null);
+  };
 
   const addCourse = () => {
     if (!newCourse.name || !newCourse.code) return;
@@ -71,6 +84,20 @@ export default function App() {
     );
   };
 
+  if (showCalendar && role === "student") {
+    return (
+      <div>
+        <Header
+          role={role}
+          setRole={handleRoleChange}
+          onCalendarClick={handleCalendarClick}
+          showCalendar={showCalendar}
+        />
+        <CalendarView events={EVENTS} onBack={handleCalendarClick} />
+      </div>
+    );
+  }
+
   if (selectedCourse) {
     const c = courses.find((x) => x.id === selectedCourse);
     if (!c) {
@@ -78,19 +105,32 @@ export default function App() {
       return null;
     }
     return (
-      <CourseDetail
-        course={c}
-        role={role}
-        onBack={() => setSelectedCourse(null)}
-        onAddAnnouncement={addAnnouncement}
-        onAddFiles={addFiles}
-      />
+      <div>
+        <Header
+          role={role}
+          setRole={handleRoleChange}
+          onCalendarClick={handleCalendarClick}
+          showCalendar={showCalendar}
+        />
+        <CourseDetail
+          course={c}
+          role={role}
+          onBack={() => setSelectedCourse(null)}
+          onAddAnnouncement={addAnnouncement}
+          onAddFiles={addFiles}
+        />
+      </div>
     );
   }
 
   return (
     <div>
-      <Header role={role} setRole={setRole} />
+      <Header
+        role={role}
+        setRole={handleRoleChange}
+        onCalendarClick={handleCalendarClick}
+        showCalendar={showCalendar}
+      />
       <main className="main">
         <div className="page-header">
           <div>
