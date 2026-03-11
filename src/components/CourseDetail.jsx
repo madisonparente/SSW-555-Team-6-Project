@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import Icon from "./Icon";
+import QuizPanel from "./QuizPanel";
 
 const FILE_ICONS = {
   pdf: "📄",
@@ -33,6 +34,13 @@ const CourseDetail = ({
   role,
   onAddAnnouncement,
   onAddFiles,
+  quizzes,
+  studentResponses,
+  onCreateQuiz,
+  onLaunchQuiz,
+  onAdvanceQuestion,
+  onEndQuiz,
+  onSubmitAnswer,
 }) => {
   const c = course;
   const [newAnnouncement, setNewAnnouncement] = useState("");
@@ -201,6 +209,19 @@ const CourseDetail = ({
             ))
           )}
         </div>
+
+        {/* Quizzes */}
+        <QuizPanel
+          role={role}
+          courseId={c.id}
+          quizzes={quizzes}
+          studentResponses={studentResponses}
+          onCreateQuiz={onCreateQuiz}
+          onLaunchQuiz={onLaunchQuiz}
+          onAdvanceQuestion={onAdvanceQuestion}
+          onEndQuiz={onEndQuiz}
+          onSubmitAnswer={onSubmitAnswer}
+        />
 
         {/* Announcements */}
         <div className="announcements-panel">
