@@ -5,6 +5,7 @@ import CourseDetail from "./components/CourseDetail";
 import NewCourseForm from "./components/NewCourseForm";
 import CalendarView from "./components/CalendarView";
 import INITIAL_COURSES from "./data/courses";
+import INITIAL_QUIZZES from "./data/quizzes";
 import USERS from "./data/users";
 import EVENTS from "./data/events";
 import "./App.css";
@@ -15,6 +16,8 @@ export default function App() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showNewCourse, setShowNewCourse] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
+  const [studentResponses, setStudentResponses] = useState({});
   const [newCourse, setNewCourse] = useState({
     name: "",
     code: "",
@@ -84,6 +87,58 @@ export default function App() {
     );
   };
 
+  const createQuiz = (courseId, title, questions) => {
+    setQuizzes((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        courseId,
+        title,
+        status: "inactive",
+        currentQuestionIndex: 0,
+        questions: questions.map((q, i) => ({ ...q, id: Date.now() + i })),
+      },
+    ]);
+  };
+
+  const launchQuiz = (quizId) => {
+    setQuizzes((prev) =>
+      prev.map((q) =>
+        q.id === quizId ? { ...q, status: "active", currentQuestionIndex: 0 } : q,
+      ),
+    );
+    setStudentResponses((prev) => {
+      const next = { ...prev };
+      delete next[quizId];
+      return next;
+    });
+  };
+
+  const advanceQuestion = (quizId) => {
+    setQuizzes((prev) =>
+      prev.map((q) =>
+        q.id === quizId
+          ? { ...q, currentQuestionIndex: q.currentQuestionIndex + 1 }
+          : q,
+      ),
+    );
+  };
+
+  const endQuiz = (quizId) => {
+    setQuizzes((prev) =>
+      prev.map((q) =>
+        q.id === quizId ? { ...q, status: "finished" } : q,
+      ),
+    );
+  };
+
+  const submitAnswer = (quizId, questionId, selectedIndex) => {
+    setStudentResponses((prev) => ({
+      ...prev,
+      [quizId]: { ...(prev[quizId] || {}), [questionId]: selectedIndex },
+    }));
+  };
+
   if (showCalendar && role === "student") {
     return (
       <div>
@@ -118,6 +173,13 @@ export default function App() {
           onBack={() => setSelectedCourse(null)}
           onAddAnnouncement={addAnnouncement}
           onAddFiles={addFiles}
+          quizzes={quizzes}
+          studentResponses={studentResponses}
+          onCreateQuiz={createQuiz}
+          onLaunchQuiz={launchQuiz}
+          onAdvanceQuestion={advanceQuestion}
+          onEndQuiz={endQuiz}
+          onSubmitAnswer={submitAnswer}
         />
       </div>
     );
