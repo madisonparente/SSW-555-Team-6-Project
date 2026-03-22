@@ -23,4 +23,4 @@ This project is a web-based course portal that allows students and instructors t
 ## Development Approach
 
 This project is developed using Agile methodologies including sprint planning, task division, and version control with Git.
-why
+

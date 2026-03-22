@@ -372,7 +372,9 @@ const CalendarView = ({ events, onBack }) => {
                                 textDecoration: 'none',
                                 fontWeight: 'bold'
                               }}
-                            ></a>
+                            >
+                              📅 Schedule Session →
+                            </a>
                           </div>
                         </div>
                       )}
