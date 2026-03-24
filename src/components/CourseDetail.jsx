@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import Icon from "./Icon";
 import QuizPanel from "./QuizPanel";
+import RecordingsPanel from "./RecordingsPanel";
 
 const FILE_ICONS = {
   pdf: "📄",
@@ -41,6 +42,8 @@ const CourseDetail = ({
   onAdvanceQuestion,
   onEndQuiz,
   onSubmitAnswer,
+  recordings,
+  onAddRecording,
 }) => {
   const c = course;
   const [newAnnouncement, setNewAnnouncement] = useState("");
@@ -209,6 +212,14 @@ const CourseDetail = ({
             ))
           )}
         </div>
+
+        {/* Recordings */}
+        <RecordingsPanel
+          recordings={(recordings || []).filter((r) => r.courseId === c.id)}
+          role={role}
+          courseColor={c.color}
+          onAddRecording={(rec) => onAddRecording(c.id, rec)}
+        />
 
         {/* Quizzes */}
         <QuizPanel

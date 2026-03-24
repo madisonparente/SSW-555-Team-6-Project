@@ -6,6 +6,7 @@ import NewCourseForm from "./components/NewCourseForm";
 import CalendarView from "./components/CalendarView";
 import INITIAL_COURSES from "./data/courses";
 import INITIAL_QUIZZES from "./data/quizzes";
+import INITIAL_RECORDINGS from "./data/recordings";
 import USERS from "./data/users";
 import EVENTS from "./data/events";
 import "./App.css";
@@ -17,6 +18,7 @@ export default function App() {
   const [showNewCourse, setShowNewCourse] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
+  const [recordings, setRecordings] = useState(INITIAL_RECORDINGS);
   const [studentResponses, setStudentResponses] = useState({});
   const [newCourse, setNewCourse] = useState({
     name: "",
@@ -132,6 +134,10 @@ export default function App() {
     );
   };
 
+  const addRecording = (courseId, recording) => {
+    setRecordings((prev) => [{ ...recording, courseId }, ...prev]);
+  };
+
   const submitAnswer = (quizId, questionId, selectedIndex) => {
     setStudentResponses((prev) => ({
       ...prev,
@@ -180,6 +186,8 @@ export default function App() {
           onAdvanceQuestion={advanceQuestion}
           onEndQuiz={endQuiz}
           onSubmitAnswer={submitAnswer}
+          recordings={recordings}
+          onAddRecording={addRecording}
         />
       </div>
     );

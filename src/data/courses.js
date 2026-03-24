@@ -10,6 +10,7 @@ const INITIAL_COURSES = [
     students: 28,
     announcements: ["Midterm moved to March 15", "Lab 3 due Friday"],
     files: [],
+    recordings: [],
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ const INITIAL_COURSES = [
     students: 35,
     announcements: ["Chapter 7 homework posted"],
     files: [],
+    recordings: [],
   },
   {
     id: 3,
@@ -34,6 +36,7 @@ const INITIAL_COURSES = [
     students: 42,
     announcements: [],
     files: [],
+    recordings: [],
   },
   {
     id: 4,
@@ -46,6 +49,7 @@ const INITIAL_COURSES = [
     students: 22,
     announcements: ["Lab safety quiz Monday", "Office hours moved to 4 PM"],
     files: [],
+    recordings: [],
   },
 ];
 
