@@ -3,6 +3,31 @@ import App from "./App";
 import "@testing-library/jest-dom";
 
 describe("App component", () => {
+  // test 1 for bad smell 
+  test("calendar displays upcoming events correctly (duplicate logic still works)", async () => {
+  render(<App />);
+
+  // Navigate to calendar
+  fireEvent.click(screen.getByRole("button", { name: /📅 Calendar/i }));
+
+  // Expect upcoming section
+  expect(await screen.findByText(/Upcoming Events/i)).toBeInTheDocument();
+});
+
+// test 2 for bad smell
+test("clicking a calendar day opens modal with events (large component still works)", async () => {
+  render(<App />);
+
+  fireEvent.click(screen.getByRole("button", { name: /📅 Calendar/i }));
+
+  // Click any day (example: 10)
+  const day = await screen.findByText("10");
+  fireEvent.click(day);
+
+  // Modal should appear
+  expect(await screen.findByText(/Events for/i)).toBeInTheDocument();
+});
+
   test("defaults to student view and displays calendar", () => {
     render(<App />);
 
@@ -76,7 +101,7 @@ describe("App component", () => {
       await screen.findByText(/React Fundamentals Quiz/i)
     ).toBeInTheDocument();
 
-    // 🔥 FIX: target the correct "Launch" button
+    // fix: target the correct "Launch" button
     const quizItem = screen
       .getByText(/React Fundamentals Quiz/i)
       .closest(".quiz-list-item");
