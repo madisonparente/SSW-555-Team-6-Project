@@ -1,3 +1,11 @@
+  // The CalendarView component handles too many responsibilities, including state management, 
+  // filtering logic, calendar rendering, event rendering, and modal handling. 
+  // Large components are also harder to test because their logic is 
+  // tightly coupled and not modular. As the application grows, adding new features to this 
+  // component will increase complexity and risk breaking existing functionality. 
+  // Breaking it into smaller, focused components improves readability, reusability, 
+  // and scalability.
+
 import React, { useState } from "react";
 
 const CalendarView = ({ events, onBack }) => {
@@ -41,7 +49,7 @@ const CalendarView = ({ events, onBack }) => {
   const formatDate = (year, month, day) => {
     return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
   };
-
+  
   const getEventsForDate = (date) => {
     const dateStr = formatDate(date.getFullYear(), date.getMonth(), date.getDate());
     return events.filter(
@@ -225,6 +233,14 @@ const CalendarView = ({ events, onBack }) => {
               <p className="no-events">No upcoming events</p>
             ) : (
               getUpcomingEvents().map((event) => (
+                // The component contains repeated blocks of JSX for rendering events in 
+                // both the upcoming events section and the modal. This duplication increases 
+                // the risk of inconsistencies because any change to the event layout must be 
+                // made in multiple places. It also makes the code harder to read and maintain, 
+                // since the same logic is scattered throughout the file. Over time, duplicated 
+                // code can introduce bugs if one section is updated while another is forgotten. 
+                // Refactoring into a reusable component improves maintainability and reduces 
+                // redundancy.
                 <div key={event.id} className="event-card">
                   <div
                     className="event-type-bar"
