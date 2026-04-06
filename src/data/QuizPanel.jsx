@@ -6,6 +6,7 @@ import InstructorReport from "./InstructorReport";
 
 const QuizPanel = ({
   role,
+  studentId,
   courseId,
   quizzes,
   studentResponses,
@@ -14,6 +15,7 @@ const QuizPanel = ({
   onAdvanceQuestion,
   onEndQuiz,
   onSubmitAnswer,
+  onSaveResult,
 }) => {
   const courseQuizzes = quizzes.filter((q) => q.courseId === courseId);
   const activeQuiz = courseQuizzes.find((q) => q.status === "active");
@@ -41,9 +43,11 @@ const QuizPanel = ({
   if (activeQuiz) {
     return (
       <QuizTaker
+        studentId={studentId}
         quiz={activeQuiz}
         responses={studentResponses[activeQuiz.id] || {}}
         onSubmitAnswer={onSubmitAnswer}
+        onSaveResult={onSaveResult}
       />
     );
   }

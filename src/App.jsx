@@ -4,11 +4,13 @@ import CourseCard from "./components/CourseCard";
 import CourseDetail from "./components/CourseDetail";
 import NewCourseForm from "./components/NewCourseForm";
 import CalendarView from "./components/CalendarView";
+import StudentDashboard from "./components/StudentDashboard";
 import INITIAL_COURSES from "./data/courses";
 import INITIAL_QUIZZES from "./data/quizzes";
 import INITIAL_RECORDINGS from "./data/recordings";
 import USERS from "./data/users";
 import EVENTS from "./data/events";
+import INITIAL_RESULTS from "./data/results";
 import "./App.css";
 
 export default function App() {
@@ -17,8 +19,10 @@ export default function App() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showNewCourse, setShowNewCourse] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
   const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
   const [recordings, setRecordings] = useState(INITIAL_RECORDINGS);
+  const [quizResults, setQuizResults] = useState(INITIAL_RESULTS);
   const [studentResponses, setStudentResponses] = useState({});
   const [newCourse, setNewCourse] = useState({
     name: "",
@@ -36,10 +40,18 @@ export default function App() {
   const handleRoleChange = (newRole) => {
     setRole(newRole);
     setShowCalendar(false); // Close calendar when switching roles
+    setShowDashboard(false);
   };
 
   const handleCalendarClick = () => {
-    setShowCalendar(!showCalendar);
+    setShowCalendar((prev) => !prev);
+    setShowDashboard(false);
+    setSelectedCourse(null);
+  };
+
+  const handleDashboardClick = () => {
+    setShowDashboard((prev) => !prev);
+    setShowCalendar(false);
     setSelectedCourse(null);
   };
 
@@ -145,6 +157,10 @@ export default function App() {
     }));
   };
 
+  const saveQuizResult = (result) => {
+    setQuizResults((prev) => [...prev, result]);
+  };
+
   if (showCalendar && role === "student") {
     return (
       <div>
@@ -153,6 +169,8 @@ export default function App() {
           setRole={handleRoleChange}
           onCalendarClick={handleCalendarClick}
           showCalendar={showCalendar}
+          onDashboardClick={handleDashboardClick}
+          showDashboard={showDashboard}
         />
         <CalendarView events={EVENTS} onBack={handleCalendarClick} />
       </div>
@@ -172,10 +190,13 @@ export default function App() {
           setRole={handleRoleChange}
           onCalendarClick={handleCalendarClick}
           showCalendar={showCalendar}
+          onDashboardClick={handleDashboardClick}
+          showDashboard={showDashboard}
         />
         <CourseDetail
           course={c}
           role={role}
+          studentId={role === "student" ? 1 : null}
           onBack={() => setSelectedCourse(null)}
           onAddAnnouncement={addAnnouncement}
           onAddFiles={addFiles}
@@ -186,12 +207,15 @@ export default function App() {
           onAdvanceQuestion={advanceQuestion}
           onEndQuiz={endQuiz}
           onSubmitAnswer={submitAnswer}
+          onSaveResult={saveQuizResult}
           recordings={recordings}
           onAddRecording={addRecording}
         />
       </div>
     );
   }
+
+  const isStudentDashboardVisible = role === "student" && showDashboard;
 
   return (
     <div>
@@ -200,43 +224,51 @@ export default function App() {
         setRole={handleRoleChange}
         onCalendarClick={handleCalendarClick}
         showCalendar={showCalendar}
+        onDashboardClick={handleDashboardClick}
+        showDashboard={showDashboard}
       />
       <main className="main">
-        <div className="page-header">
-          <div>
-            <h1 className="page-title">
-              {role === "student" ? "My Courses" : "My Classes"}
-            </h1>
-            <p className="page-subtitle">
-              {courses.length} courses · {totalAnnouncements} announcements
-            </p>
-          </div>
-          {role === "teacher" && (
-            <button
-              className="new-course-btn"
-              onClick={() => setShowNewCourse(true)}
-            >
-              + New Course
-            </button>
-          )}
-        </div>
-        {showNewCourse && (
-          <NewCourseForm
-            newCourse={newCourse}
-            setNewCourse={setNewCourse}
-            onSubmit={addCourse}
-            onClose={() => setShowNewCourse(false)}
-          />
+        {isStudentDashboardVisible ? (
+          <StudentDashboard studentId={1} events={EVENTS} results={quizResults} />
+        ) : (
+          <>
+            <div className="page-header">
+              <div>
+                <h1 className="page-title">
+                  {role === "student" ? "My Courses" : "My Classes"}
+                </h1>
+                <p className="page-subtitle">
+                  {courses.length} courses · {totalAnnouncements} announcements
+                </p>
+              </div>
+              {role === "teacher" && (
+                <button
+                  className="new-course-btn"
+                  onClick={() => setShowNewCourse(true)}
+                >
+                  + New Course
+                </button>
+              )}
+            </div>
+            {showNewCourse && (
+              <NewCourseForm
+                newCourse={newCourse}
+                setNewCourse={setNewCourse}
+                onSubmit={addCourse}
+                onClose={() => setShowNewCourse(false)}
+              />
+            )}
+            <div className="course-grid">
+              {courses.map((c) => (
+                <CourseCard
+                  key={c.id}
+                  course={c}
+                  onClick={() => setSelectedCourse(c.id)}
+                />
+              ))}
+            </div>
+          </>
         )}
-        <div className="course-grid">
-          {courses.map((c) => (
-            <CourseCard
-              key={c.id}
-              course={c}
-              onClick={() => setSelectedCourse(c.id)}
-            />
-          ))}
-        </div>
       </main>
     </div>
   );

@@ -31,6 +31,8 @@ const formatSize = (bytes) => {
 
 const CourseDetail = ({
   course,
+  studentId,
+  onSaveResult,
   onBack,
   role,
   onAddAnnouncement,
@@ -224,6 +226,7 @@ const CourseDetail = ({
         {/* Quizzes */}
         <QuizPanel
           role={role}
+          studentId={studentId}
           courseId={c.id}
           quizzes={quizzes}
           studentResponses={studentResponses}
@@ -232,6 +235,7 @@ const CourseDetail = ({
           onAdvanceQuestion={onAdvanceQuestion}
           onEndQuiz={onEndQuiz}
           onSubmitAnswer={onSubmitAnswer}
+          onSaveResult={onSaveResult}
         />
 
         {/* Announcements */}

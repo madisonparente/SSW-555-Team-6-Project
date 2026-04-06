@@ -1,28 +1,38 @@
-import React, { useState } from "react";
-import { saveQuizResult } from "./results";
+import React, { useState, useEffect } from "react";
 
-const QuizTaker = ({ quiz, responses, onSubmitAnswer }) => {
+const QuizTaker = ({ studentId, quiz, responses, onSubmitAnswer, onSaveResult }) => {
   const [selected, setSelected] = useState(null);
+  const [savedResult, setSavedResult] = useState(false);
   const question = quiz.questions[quiz.currentQuestionIndex];
 
+  useEffect(() => {
+    if (!question && !savedResult) {
+      const total = quiz.questions.length;
+      const correct = quiz.questions.filter(
+        (q) => responses[q.id] === q.correctIndex,
+      ).length;
+      const pct = Math.round((correct / total) * 100);
+
+      onSaveResult({
+        studentId,
+        quizId: quiz.id,
+        title: quiz.title,
+        score: correct,
+        total: total,
+        percentage: pct,
+        responses: responses,
+        timestamp: Date.now(),
+      });
+      setSavedResult(true);
+    }
+  }, [question, savedResult, quiz, responses, studentId, onSaveResult]);
+
   if (!question) {
-    // Quiz finished — show score
     const total = quiz.questions.length;
     const correct = quiz.questions.filter(
       (q) => responses[q.id] === q.correctIndex,
     ).length;
     const pct = Math.round((correct / total) * 100);
-
-    // Save result for reporting
-    saveQuizResult({
-      quizId: quiz.id,
-      title: quiz.title,
-      score: correct,
-      total: total,
-      percentage: pct,
-      responses: responses,
-      timestamp: Date.now(),
-    });
 
     return (
       <div className="announcements-panel" style={{ marginBottom: 24 }}>

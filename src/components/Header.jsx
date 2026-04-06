@@ -2,7 +2,7 @@ import React from "react";
 
 import USERS from "../data/users";
 
-const Header = ({ role, setRole, onCalendarClick, showCalendar }) => {
+const Header = ({ role, setRole, onCalendarClick, showCalendar, onDashboardClick, showDashboard }) => {
   const user = USERS[role];
 
   return (
@@ -13,13 +13,22 @@ const Header = ({ role, setRole, onCalendarClick, showCalendar }) => {
       </div>
       <div className="header-right">
         {role === "student" && (
-          <button
-            className={`calendar-nav-btn ${showCalendar ? "active" : ""}`}
-            onClick={onCalendarClick}
-            title="View calendar"
-          >
-            📅 Calendar
-          </button>
+          <>
+            <button
+              className={`calendar-nav-btn ${showCalendar ? "active" : ""}`}
+              onClick={onCalendarClick}
+              title="View calendar"
+            >
+              📅 Calendar
+            </button>
+            <button
+              className={`calendar-nav-btn ${showDashboard ? "active" : ""}`}
+              onClick={onDashboardClick}
+              title="View dashboard"
+            >
+              📊 Dashboard
+            </button>
+          </>
         )}
         <div className="role-toggle">
           {["student", "teacher"].map((r) => (
