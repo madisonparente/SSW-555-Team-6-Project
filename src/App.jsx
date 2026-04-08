@@ -5,7 +5,11 @@ import CourseDetail from "./components/CourseDetail";
 import NewCourseForm from "./components/NewCourseForm";
 import CalendarView from "./components/CalendarView";
 import StudentDashboard from "./components/StudentDashboard";
+<<<<<<< HEAD
 import StudySessionPanel from "./components/StudySessionPanel";
+=======
+import RecordingsRepository from "./components/RecordingsRepository";
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
 import INITIAL_COURSES from "./data/courses";
 import INITIAL_QUIZZES from "./data/quizzes";
 import INITIAL_RECORDINGS from "./data/recordings";
@@ -21,8 +25,12 @@ export default function App() {
   const [showNewCourse, setShowNewCourse] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+<<<<<<< HEAD
   const [showStudyGroups, setShowStudyGroups] = useState(false);
   const [studySessions, setStudySessions] = useState([]);
+=======
+  const [showRecordings, setShowRecordings] = useState(false);
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
   const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
   const [recordings, setRecordings] = useState(INITIAL_RECORDINGS);
   const [quizResults, setQuizResults] = useState(INITIAL_RESULTS);
@@ -42,21 +50,37 @@ export default function App() {
 
   const handleRoleChange = (newRole) => {
     setRole(newRole);
-    setShowCalendar(false); // Close calendar when switching roles
+    setShowCalendar(false);
     setShowDashboard(false);
+    setShowRecordings(false);
   };
 
   const handleCalendarClick = () => {
     setShowCalendar((prev) => !prev);
     setShowDashboard(false);
+<<<<<<< HEAD
     setShowStudyGroups(false);
+=======
+    setShowRecordings(false);
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
     setSelectedCourse(null);
   };
 
   const handleDashboardClick = () => {
     setShowDashboard((prev) => !prev);
     setShowCalendar(false);
+<<<<<<< HEAD
     setShowStudyGroups(false);
+=======
+    setShowRecordings(false);
+    setSelectedCourse(null);
+  };
+
+  const handleRecordingsClick = () => {
+    setShowRecordings((prev) => !prev);
+    setShowCalendar(false);
+    setShowDashboard(false);
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
     setSelectedCourse(null);
   };
 
@@ -187,10 +211,37 @@ export default function App() {
           showCalendar={showCalendar}
           onDashboardClick={handleDashboardClick}
           showDashboard={showDashboard}
+<<<<<<< HEAD
           onStudyGroupsClick={handleStudyGroupsClick}
           showStudyGroups={showStudyGroups}
+=======
+          onRecordingsClick={handleRecordingsClick}
+          showRecordings={showRecordings}
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
         />
         <CalendarView events={EVENTS} onBack={handleCalendarClick} />
+      </div>
+    );
+  }
+
+  if (showRecordings && role === "student") {
+    return (
+      <div>
+        <Header
+          role={role}
+          setRole={handleRoleChange}
+          onCalendarClick={handleCalendarClick}
+          showCalendar={showCalendar}
+          onDashboardClick={handleDashboardClick}
+          showDashboard={showDashboard}
+          onRecordingsClick={handleRecordingsClick}
+          showRecordings={showRecordings}
+        />
+        <RecordingsRepository
+          recordings={recordings}
+          courses={courses}
+          onBack={handleRecordingsClick}
+        />
       </div>
     );
   }
@@ -210,8 +261,13 @@ export default function App() {
           showCalendar={showCalendar}
           onDashboardClick={handleDashboardClick}
           showDashboard={showDashboard}
+<<<<<<< HEAD
           onStudyGroupsClick={handleStudyGroupsClick}
           showStudyGroups={showStudyGroups}
+=======
+          onRecordingsClick={handleRecordingsClick}
+          showRecordings={showRecordings}
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
         />
         <CourseDetail
           course={c}
@@ -247,8 +303,13 @@ export default function App() {
         showCalendar={showCalendar}
         onDashboardClick={handleDashboardClick}
         showDashboard={showDashboard}
+<<<<<<< HEAD
         onStudyGroupsClick={handleStudyGroupsClick}
         showStudyGroups={showStudyGroups}
+=======
+        onRecordingsClick={handleRecordingsClick}
+        showRecordings={showRecordings}
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
       />
       <main className="main">
         {isStudentDashboardVisible ? (

@@ -2,7 +2,11 @@ import React from "react";
 
 import USERS from "../data/users";
 
+<<<<<<< HEAD
 const Header = ({ role, setRole, onCalendarClick, showCalendar, onDashboardClick, showDashboard, onStudyGroupsClick, showStudyGroups }) => {
+=======
+const Header = ({ role, setRole, onCalendarClick, showCalendar, onDashboardClick, showDashboard, onRecordingsClick, showRecordings }) => {
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
   const user = USERS[role];
 
   return (
@@ -29,11 +33,19 @@ const Header = ({ role, setRole, onCalendarClick, showCalendar, onDashboardClick
               📊 Dashboard
             </button>
             <button
+<<<<<<< HEAD
               className={`calendar-nav-btn ${showStudyGroups ? "active" : ""}`}
               onClick={onStudyGroupsClick}
               title="Study groups"
             >
               🤝 Study Groups
+=======
+              className={`calendar-nav-btn ${showRecordings ? "active" : ""}`}
+              onClick={onRecordingsClick}
+              title="View recordings"
+            >
+              🎥 Recordings
+>>>>>>> d6fd7b7d8eafd0478b03042100daef8eaf767e6c
             </button>
           </>
         )}
