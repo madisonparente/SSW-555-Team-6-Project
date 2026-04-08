@@ -5,6 +5,7 @@ import CourseDetail from "./components/CourseDetail";
 import NewCourseForm from "./components/NewCourseForm";
 import CalendarView from "./components/CalendarView";
 import StudentDashboard from "./components/StudentDashboard";
+import RecordingsRepository from "./components/RecordingsRepository";
 import INITIAL_COURSES from "./data/courses";
 import INITIAL_QUIZZES from "./data/quizzes";
 import INITIAL_RECORDINGS from "./data/recordings";
@@ -20,6 +21,7 @@ export default function App() {
   const [showNewCourse, setShowNewCourse] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showRecordings, setShowRecordings] = useState(false);
   const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
   const [recordings, setRecordings] = useState(INITIAL_RECORDINGS);
   const [quizResults, setQuizResults] = useState(INITIAL_RESULTS);
@@ -39,19 +41,29 @@ export default function App() {
 
   const handleRoleChange = (newRole) => {
     setRole(newRole);
-    setShowCalendar(false); // Close calendar when switching roles
+    setShowCalendar(false);
     setShowDashboard(false);
+    setShowRecordings(false);
   };
 
   const handleCalendarClick = () => {
     setShowCalendar((prev) => !prev);
     setShowDashboard(false);
+    setShowRecordings(false);
     setSelectedCourse(null);
   };
 
   const handleDashboardClick = () => {
     setShowDashboard((prev) => !prev);
     setShowCalendar(false);
+    setShowRecordings(false);
+    setSelectedCourse(null);
+  };
+
+  const handleRecordingsClick = () => {
+    setShowRecordings((prev) => !prev);
+    setShowCalendar(false);
+    setShowDashboard(false);
     setSelectedCourse(null);
   };
 
@@ -171,8 +183,32 @@ export default function App() {
           showCalendar={showCalendar}
           onDashboardClick={handleDashboardClick}
           showDashboard={showDashboard}
+          onRecordingsClick={handleRecordingsClick}
+          showRecordings={showRecordings}
         />
         <CalendarView events={EVENTS} onBack={handleCalendarClick} />
+      </div>
+    );
+  }
+
+  if (showRecordings && role === "student") {
+    return (
+      <div>
+        <Header
+          role={role}
+          setRole={handleRoleChange}
+          onCalendarClick={handleCalendarClick}
+          showCalendar={showCalendar}
+          onDashboardClick={handleDashboardClick}
+          showDashboard={showDashboard}
+          onRecordingsClick={handleRecordingsClick}
+          showRecordings={showRecordings}
+        />
+        <RecordingsRepository
+          recordings={recordings}
+          courses={courses}
+          onBack={handleRecordingsClick}
+        />
       </div>
     );
   }
@@ -192,6 +228,8 @@ export default function App() {
           showCalendar={showCalendar}
           onDashboardClick={handleDashboardClick}
           showDashboard={showDashboard}
+          onRecordingsClick={handleRecordingsClick}
+          showRecordings={showRecordings}
         />
         <CourseDetail
           course={c}
@@ -226,6 +264,8 @@ export default function App() {
         showCalendar={showCalendar}
         onDashboardClick={handleDashboardClick}
         showDashboard={showDashboard}
+        onRecordingsClick={handleRecordingsClick}
+        showRecordings={showRecordings}
       />
       <main className="main">
         {isStudentDashboardVisible ? (

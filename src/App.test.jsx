@@ -195,4 +195,90 @@ test("clicking a calendar day opens modal with events (large component still wor
     screen.getByRole("button", { name: /Review/i })
   ).toBeInTheDocument();
   });
+
+  // ===== Recordings Repository Tests =====
+
+  test("student sees Recordings button in header", () => {
+    render(<App />);
+    expect(screen.getByRole("button", { name: /🎥 Recordings/i })).toBeInTheDocument();
+  });
+
+  test("teacher does NOT see Recordings button", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /👩‍🏫 Teacher/i }));
+    expect(screen.queryByRole("button", { name: /🎥 Recordings/i })).not.toBeInTheDocument();
+  });
+
+  test("clicking Recordings shows the repository page with recording count", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /🎥 Recordings/i }));
+    expect(screen.getByText(/Recordings Repository/i)).toBeInTheDocument();
+    expect(screen.getByText(/8 recordings across 4 courses/i)).toBeInTheDocument();
+  });
+
+  test("recordings from multiple courses are displayed", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /🎥 Recordings/i }));
+    expect(screen.getByText(/Intro to Algorithms/i)).toBeInTheDocument();
+    expect(screen.getByText(/Integration by Parts/i)).toBeInTheDocument();
+    expect(screen.getByText(/The French Revolution/i)).toBeInTheDocument();
+    expect(screen.getByText(/Stereochemistry/i)).toBeInTheDocument();
+  });
+
+  test("search filters recordings by title", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /🎥 Recordings/i }));
+    const searchInput = screen.getByPlaceholderText(/Search recordings/i);
+    fireEvent.change(searchInput, { target: { value: "Taylor" } });
+    expect(screen.getByText(/Taylor Series Expansion/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Intro to Algorithms/i)).not.toBeInTheDocument();
+  });
+
+  test("course filter dropdown limits to selected course", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /🎥 Recordings/i }));
+    const filterSelect = screen.getByDisplayValue(/All Courses/i);
+    fireEvent.change(filterSelect, { target: { value: "1" } });
+    expect(screen.getByText(/Intro to Algorithms/i)).toBeInTheDocument();
+    expect(screen.getByText(/Data Structures/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Integration by Parts/i)).not.toBeInTheDocument();
+  });
+
+  test("each recording card shows its course name", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /🎥 Recordings/i }));
+    const tags = screen.getAllByText(/CS101 – Intro to Computer Science/i);
+    expect(tags.length).toBeGreaterThanOrEqual(1);
+    const courseTags = tags.filter((el) => el.classList.contains("recording-course-tag"));
+    expect(courseTags.length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/MATH201 – Calculus II/i).length).toBeGreaterThanOrEqual(1);
+  });
+
+  test("watch buttons have correct link attributes", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /🎥 Recordings/i }));
+    const watchLinks = screen.getAllByText("Watch");
+    watchLinks.forEach((link) => {
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link).toHaveAttribute("rel", "noopener noreferrer");
+      expect(link).toHaveAttribute("href");
+    });
+  });
+
+  test("no-match message for empty search results", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /🎥 Recordings/i }));
+    const searchInput = screen.getByPlaceholderText(/Search recordings/i);
+    fireEvent.change(searchInput, { target: { value: "xyznonexistent" } });
+    expect(screen.getByText(/No recordings match your search/i)).toBeInTheDocument();
+  });
+
+  test("clicking Calendar while in Recordings switches views", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /🎥 Recordings/i }));
+    expect(screen.getByText(/Recordings Repository/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /📅 Calendar/i }));
+    expect(screen.queryByText(/Recordings Repository/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/📌 Upcoming Events/i)).toBeInTheDocument();
+  });
 });
