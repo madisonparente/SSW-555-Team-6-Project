@@ -5,6 +5,7 @@ import CourseDetail from "./components/CourseDetail";
 import NewCourseForm from "./components/NewCourseForm";
 import CalendarView from "./components/CalendarView";
 import StudentDashboard from "./components/StudentDashboard";
+import StudySessionPanel from "./components/StudySessionPanel";
 import INITIAL_COURSES from "./data/courses";
 import INITIAL_QUIZZES from "./data/quizzes";
 import INITIAL_RECORDINGS from "./data/recordings";
@@ -20,6 +21,8 @@ export default function App() {
   const [showNewCourse, setShowNewCourse] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showStudyGroups, setShowStudyGroups] = useState(false);
+  const [studySessions, setStudySessions] = useState([]);
   const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
   const [recordings, setRecordings] = useState(INITIAL_RECORDINGS);
   const [quizResults, setQuizResults] = useState(INITIAL_RESULTS);
@@ -46,13 +49,26 @@ export default function App() {
   const handleCalendarClick = () => {
     setShowCalendar((prev) => !prev);
     setShowDashboard(false);
+    setShowStudyGroups(false);
     setSelectedCourse(null);
   };
 
   const handleDashboardClick = () => {
     setShowDashboard((prev) => !prev);
     setShowCalendar(false);
+    setShowStudyGroups(false);
     setSelectedCourse(null);
+  };
+
+  const handleStudyGroupsClick = () => {
+    setShowStudyGroups((prev) => !prev);
+    setShowDashboard(false);
+    setShowCalendar(false);
+    setSelectedCourse(null);
+  };
+
+  const addStudySession = (session) => {
+    setStudySessions((prev) => [session, ...prev]);
   };
 
   const addCourse = () => {
@@ -171,6 +187,8 @@ export default function App() {
           showCalendar={showCalendar}
           onDashboardClick={handleDashboardClick}
           showDashboard={showDashboard}
+          onStudyGroupsClick={handleStudyGroupsClick}
+          showStudyGroups={showStudyGroups}
         />
         <CalendarView events={EVENTS} onBack={handleCalendarClick} />
       </div>
@@ -192,6 +210,8 @@ export default function App() {
           showCalendar={showCalendar}
           onDashboardClick={handleDashboardClick}
           showDashboard={showDashboard}
+          onStudyGroupsClick={handleStudyGroupsClick}
+          showStudyGroups={showStudyGroups}
         />
         <CourseDetail
           course={c}
@@ -216,6 +236,7 @@ export default function App() {
   }
 
   const isStudentDashboardVisible = role === "student" && showDashboard;
+  const isStudyGroupsVisible = role === "student" && showStudyGroups;
 
   return (
     <div>
@@ -226,10 +247,19 @@ export default function App() {
         showCalendar={showCalendar}
         onDashboardClick={handleDashboardClick}
         showDashboard={showDashboard}
+        onStudyGroupsClick={handleStudyGroupsClick}
+        showStudyGroups={showStudyGroups}
       />
       <main className="main">
         {isStudentDashboardVisible ? (
           <StudentDashboard studentId={1} events={EVENTS} results={quizResults} />
+        ) : isStudyGroupsVisible ? (
+          <StudySessionPanel
+            courses={courses}
+            currentUser={user.name}
+            sessions={studySessions}
+            onCreateSession={addStudySession}
+          />
         ) : (
           <>
             <div className="page-header">

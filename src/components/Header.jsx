@@ -2,7 +2,7 @@ import React from "react";
 
 import USERS from "../data/users";
 
-const Header = ({ role, setRole, onCalendarClick, showCalendar, onDashboardClick, showDashboard }) => {
+const Header = ({ role, setRole, onCalendarClick, showCalendar, onDashboardClick, showDashboard, onStudyGroupsClick, showStudyGroups }) => {
   const user = USERS[role];
 
   return (
@@ -27,6 +27,13 @@ const Header = ({ role, setRole, onCalendarClick, showCalendar, onDashboardClick
               title="View dashboard"
             >
               📊 Dashboard
+            </button>
+            <button
+              className={`calendar-nav-btn ${showStudyGroups ? "active" : ""}`}
+              onClick={onStudyGroupsClick}
+              title="Study groups"
+            >
+              🤝 Study Groups
             </button>
           </>
         )}
