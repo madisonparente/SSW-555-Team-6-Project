@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { getRecommendations } from "../utils/getRecommendations";
 
-const QuizTaker = ({ quiz, responses, onSubmitAnswer }) => {
+const QuizTaker = ({ quiz, responses, onSubmitAnswer, recordings = [] }) => {
   const [selected, setSelected] = useState(null);
   const question = quiz.questions[quiz.currentQuestionIndex];
 
@@ -11,6 +12,7 @@ const QuizTaker = ({ quiz, responses, onSubmitAnswer }) => {
       (q) => responses[q.id] === q.correctIndex,
     ).length;
     const pct = Math.round((correct / total) * 100);
+    const recs = getRecommendations(quiz, responses, recordings);
 
     return (
       <div className="announcements-panel" style={{ marginBottom: 24 }}>
@@ -22,6 +24,33 @@ const QuizTaker = ({ quiz, responses, onSubmitAnswer }) => {
           <div className="score-pct">{pct}%</div>
           <div className="score-label">Final Score</div>
         </div>
+        {recs.length > 0 && (
+          <div className="recommendations-section">
+            <h3 className="recommendations-title">Recommended Review Materials</h3>
+            <p className="recommendations-subtitle">
+              Based on the questions you missed, these recordings may help:
+            </p>
+            {recs.map((r) => (
+              <div key={r.id} className="recommendation-card">
+                <div className="recommendation-info">
+                  <div className="recommendation-name">{r.title}</div>
+                  <div className="recommendation-meta">
+                    {r.duration} · {r.date}
+                  </div>
+                </div>
+                <a
+                  href={r.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="recording-watch-btn"
+                  style={{ background: "#6366f1" }}
+                >
+                  Watch
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }

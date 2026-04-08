@@ -1,4 +1,5 @@
 import React from "react";
+import { getRecommendationsForResult } from "../utils/getRecommendations";
 
 const attendanceEventIds = [1, 2, 3, 5, 6, 9];
 
@@ -15,7 +16,7 @@ const getUpcomingMilestones = (events) => {
     .slice(0, 4);
 };
 
-const StudentDashboard = ({ studentId, events, results = [] }) => {
+const StudentDashboard = ({ studentId, events, results = [], quizzes = [], recordings = [], studentResponses = {} }) => {
   const studentResults = results.filter((result) => result.studentId === studentId);
   const quizCount = studentResults.length;
   const averageScore = quizCount
@@ -128,6 +129,46 @@ const StudentDashboard = ({ studentId, events, results = [] }) => {
           <p className="empty-text">Complete a quiz to populate your growth dashboard.</p>
         )}
       </div>
+
+      {(() => {
+        const allRecs = studentResults
+          .flatMap((result) =>
+            getRecommendationsForResult(result, quizzes, studentResponses, recordings),
+          )
+          .filter((r, i, arr) => arr.findIndex((x) => x.id === r.id) === i);
+
+        if (allRecs.length === 0) return null;
+
+        return (
+          <div className="dashboard-card recent-scores-card">
+            <h3>Recommended Review Materials</h3>
+            <p className="recommendations-subtitle">
+              Recordings that cover topics from quizzes where you scored below 70%:
+            </p>
+            <div className="recent-scores-list">
+              {allRecs.map((r) => (
+                <div key={r.id} className="recommendation-card">
+                  <div className="recommendation-info">
+                    <div className="recommendation-name">{r.title}</div>
+                    <div className="recommendation-meta">
+                      {r.duration} · {r.date}
+                    </div>
+                  </div>
+                  <a
+                    href={r.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="recording-watch-btn"
+                    style={{ background: "#6366f1" }}
+                  >
+                    Watch
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
     </section>
   );
 };

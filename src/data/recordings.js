@@ -8,6 +8,7 @@ const INITIAL_RECORDINGS = [
     videoUrl: "https://www.youtube.com/watch?v=example1",
     description:
       "Covers time complexity basics, Big-O, Big-Theta, and common algorithm patterns.",
+    topics: ["time-complexity", "algorithms"],
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ const INITIAL_RECORDINGS = [
     videoUrl: "https://www.youtube.com/watch?v=example2",
     description:
       "Walkthrough of linked list operations, stack implementation, and use-cases.",
+    topics: ["data-structures", "queues"],
   },
   {
     id: 3,
@@ -28,6 +30,7 @@ const INITIAL_RECORDINGS = [
     videoUrl: "https://www.youtube.com/watch?v=example3",
     description:
       "Detailed examples of integration by parts with practice problems.",
+    topics: ["integration-by-parts", "integration-techniques", "integration"],
   },
   {
     id: 4,
@@ -38,6 +41,7 @@ const INITIAL_RECORDINGS = [
     videoUrl: "https://www.youtube.com/watch?v=example4",
     description:
       "Deriving Taylor and Maclaurin series, convergence tests, and applications.",
+    topics: ["taylor-series"],
   },
   {
     id: 5,
@@ -48,6 +52,7 @@ const INITIAL_RECORDINGS = [
     videoUrl: "https://www.youtube.com/watch?v=example5",
     description:
       "Overview of the social, economic, and political causes leading to the Revolution.",
+    topics: ["french-revolution", "political-history"],
   },
   {
     id: 6,
@@ -58,6 +63,7 @@ const INITIAL_RECORDINGS = [
     videoUrl: "https://www.youtube.com/watch?v=example6",
     description:
       "Technological advances, factory systems, and worldwide socioeconomic changes.",
+    topics: ["industrial-revolution", "economic-history"],
   },
   {
     id: 7,
@@ -68,6 +74,7 @@ const INITIAL_RECORDINGS = [
     videoUrl: "https://www.youtube.com/watch?v=example7",
     description:
       "R/S configuration, enantiomers, diastereomers, and optical activity.",
+    topics: ["stereochemistry", "chirality"],
   },
   {
     id: 8,
@@ -78,6 +85,7 @@ const INITIAL_RECORDINGS = [
     videoUrl: "https://www.youtube.com/watch?v=example8",
     description:
       "Mechanism comparison, kinetics, stereochemical outcomes, and solvent effects.",
+    topics: ["nucleophilic-substitution", "reaction-mechanisms"],
   },
 ];
 

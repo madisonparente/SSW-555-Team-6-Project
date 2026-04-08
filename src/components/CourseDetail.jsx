@@ -236,6 +236,7 @@ const CourseDetail = ({
           onEndQuiz={onEndQuiz}
           onSubmitAnswer={onSubmitAnswer}
           onSaveResult={onSaveResult}
+          recordings={(recordings || []).filter((r) => r.courseId === c.id)}
         />
 
         {/* Announcements */}

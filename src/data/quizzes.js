@@ -11,12 +11,14 @@ const INITIAL_QUIZZES = [
         text: "What is the time complexity of binary search?",
         options: ["O(n)", "O(log n)", "O(n log n)", "O(1)"],
         correctIndex: 1,
+        topics: ["binary-search", "time-complexity"],
       },
       {
         id: 2,
         text: "Which data structure uses FIFO ordering?",
         options: ["Stack", "Queue", "Tree", "Graph"],
         correctIndex: 1,
+        topics: ["queues", "data-structures"],
       },
       {
         id: 3,
@@ -28,6 +30,7 @@ const INITIAL_QUIZZES = [
           "Core Processing Unit",
         ],
         correctIndex: 0,
+        topics: ["hardware-basics"],
       },
     ],
   },
@@ -43,6 +46,7 @@ const INITIAL_QUIZZES = [
         text: "What is the integral of 2x?",
         options: ["x²", "x² + C", "2x² + C", "x + C"],
         correctIndex: 1,
+        topics: ["integration", "basic-integrals"],
       },
       {
         id: 5,
@@ -54,6 +58,7 @@ const INITIAL_QUIZZES = [
           "Trigonometric substitution",
         ],
         correctIndex: 1,
+        topics: ["integration-by-parts", "integration-techniques"],
       },
     ],
   },
