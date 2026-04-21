@@ -9,7 +9,7 @@ const Header = ({ role, setRole, onCalendarClick, showCalendar, onDashboardClick
     <header className="header">
       <div className="header-logo">
         <div className="logo-icon">📚</div>
-        <span className="logo-text">ClassRoom</span>
+        <span className="logo-text">ClassLink</span>
       </div>
       <div className="header-right">
         {role === "student" && (

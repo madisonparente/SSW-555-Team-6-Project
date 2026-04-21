@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SESSION_BASE_URL = "https://classroom.app/study/";
+const SESSION_BASE_URL = "https://classlink.app/study/";
 
 function generateSessionId() {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
