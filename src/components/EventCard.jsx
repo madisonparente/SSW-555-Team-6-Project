@@ -1,6 +1,6 @@
 import React from "react";
 
-const EventCard = ({ event, getEventTypeColor, getEventTypeLabel, isModal = false }) => {
+const EventCard = ({ event, getEventTypeColor, getEventTypeLabel, isModal = false, onDelete }) => {
   const renderEventDetails = () => {
     switch (event.type) {
       case "class":
@@ -78,9 +78,16 @@ const EventCard = ({ event, getEventTypeColor, getEventTypeLabel, isModal = fals
       <div className="event-content">
         <div className="event-header">
           <h3 className="event-title">{event.title}</h3>
-          <span className="event-type-badge" style={{ backgroundColor: getEventTypeColor(event.type) }}>
-            {getEventTypeLabel(event.type)}
-          </span>
+          <div className="event-header-right">
+            <span className="event-type-badge" style={{ backgroundColor: getEventTypeColor(event.type) }}>
+              {getEventTypeLabel(event.type)}
+            </span>
+            {isModal && onDelete && (
+              <button className="delete-event-btn" onClick={onDelete}>
+                🗑️
+              </button>
+            )}
+          </div>
         </div>
         {!isModal && (
           <div className="event-date">

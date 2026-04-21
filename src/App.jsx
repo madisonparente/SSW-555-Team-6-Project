@@ -29,10 +29,20 @@ export default function App() {
   const [recordings, setRecordings] = useState(INITIAL_RECORDINGS);
   const [quizResults, setQuizResults] = useState(INITIAL_RESULTS);
   const [studentResponses, setStudentResponses] = useState({});
+  const [events, setEvents] = useState(EVENTS);
   const [newCourse, setNewCourse] = useState({
     name: "",
     code: "",
     schedule: "",
+    meetLink: "",
+  });
+  const [newEvent, setNewEvent] = useState({
+    type: "",
+    title: "",
+    date: "",
+    startTime: "",
+    endTime: "",
+    location: "",
     meetLink: "",
   });
   const user = USERS[role];
@@ -112,11 +122,55 @@ export default function App() {
     setShowNewCourse(false);
   };
 
+  const addEvent = () => {
+    if (!newEvent.type || !newEvent.title || !newEvent.date) return;
+    setEvents((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        ...newEvent,
+        courseId: null, // Since it's added by student, no specific course
+        courseName: "",
+        courseCode: "",
+        dayOfWeek: new Date(newEvent.date).toLocaleDateString('en-US', { weekday: 'long' }),
+      },
+    ]);
+    setNewEvent({
+      type: "",
+      title: "",
+      date: "",
+      startTime: "",
+      endTime: "",
+      location: "",
+      meetLink: "",
+    });
+  };
+
+  const deleteEvent = (eventId) => {
+    setEvents((prev) => prev.filter((event) => event.id !== eventId));
+  };
+
   const addAnnouncement = (courseId, text) => {
     setCourses((prev) =>
       prev.map((c) =>
         c.id === courseId
-          ? { ...c, announcements: [text, ...c.announcements] }
+          ? { ...c, announcements: [{ id: Date.now(), text }, ...c.announcements] }
+          : c,
+      ),
+    );
+  };
+
+  const deleteAnnouncement = (courseId, announcementId) => {
+    setCourses((prev) =>
+      prev.map((c) =>
+        c.id === courseId
+          ? {
+              ...c,
+              announcements: c.announcements.filter((a) => {
+                const aId = typeof a === 'string' ? null : a.id;
+                return aId !== announcementId;
+              }),
+            }
           : c,
       ),
     );
@@ -207,7 +261,14 @@ export default function App() {
           onRecordingsClick={handleRecordingsClick}
           showRecordings={showRecordings}
         />
-        <CalendarView events={EVENTS} onBack={handleCalendarClick} />
+        <CalendarView 
+          events={events} 
+          onBack={handleCalendarClick}
+          newEvent={newEvent}
+          setNewEvent={setNewEvent}
+          addEvent={addEvent}
+          deleteEvent={deleteEvent}
+        />
       </div>
     );
   }
@@ -260,6 +321,7 @@ export default function App() {
           studentId={role === "student" ? 1 : null}
           onBack={() => setSelectedCourse(null)}
           onAddAnnouncement={addAnnouncement}
+          onDeleteAnnouncement={deleteAnnouncement}
           onAddFiles={addFiles}
           quizzes={quizzes}
           studentResponses={studentResponses}
@@ -297,7 +359,7 @@ export default function App() {
         {isStudentDashboardVisible ? (
           <StudentDashboard
             studentId={1}
-            events={EVENTS}
+            events={events}
             results={quizResults}
             quizzes={quizzes}
             recordings={recordings}

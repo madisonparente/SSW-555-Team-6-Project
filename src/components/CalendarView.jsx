@@ -6,11 +6,13 @@ import CalendarGrid from "./CalendarGrid";
 import CalendarLegend from "./CalendarLegend";
 import UpcomingEvents from "./UpcomingEvents";
 import EventModal from "./EventModal";
+import NewEventForm from "./NewEventForm";
 
-const CalendarView = ({ events, onBack }) => {
+const CalendarView = ({ events, onBack, newEvent, setNewEvent, addEvent, deleteEvent }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [selectedDate, setSelectedDate] = useState(null);
+  const [showNewEventForm, setShowNewEventForm] = useState(false);
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -44,6 +46,7 @@ const CalendarView = ({ events, onBack }) => {
       case "tutoring": return "#10b981";
       case "deadline": return "#ef4444";
       case "office-hours": return "#8b5cf6";
+      case "other": return "#6b7280";
       default: return "#6b7280";
     }
   };
@@ -54,13 +57,14 @@ const CalendarView = ({ events, onBack }) => {
       case "tutoring": return "Tutoring";
       case "deadline": return "Deadline";
       case "office-hours": return "Office Hours";
+      case "other": return "Other";
       default: return type;
     }
   };
 
   return (
     <div className="calendar-view">
-      <CalendarHeader onBack={onBack} />
+      <CalendarHeader onBack={onBack} onAddEvent={() => setShowNewEventForm(true)} />
 
       <div className="calendar-container">
         <div className="calendar-section">
@@ -105,7 +109,24 @@ const CalendarView = ({ events, onBack }) => {
         getEventsForDate={getEventsForDate}
         getEventTypeColor={getEventTypeColor}
         getEventTypeLabel={getEventTypeLabel}
+        onDeleteEvent={deleteEvent}
       />
+
+      {showNewEventForm && (
+        <div className="modal-overlay" onClick={() => setShowNewEventForm(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <NewEventForm
+              newEvent={newEvent}
+              setNewEvent={setNewEvent}
+              onSubmit={() => {
+                addEvent();
+                setShowNewEventForm(false);
+              }}
+              onClose={() => setShowNewEventForm(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
