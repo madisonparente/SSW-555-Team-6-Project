@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/SSW-555-Team-6-Project/static/css/main.3abf470d.css",
+    "main.js": "/SSW-555-Team-6-Project/static/js/main.414f569e.js",
+    "index.html": "/SSW-555-Team-6-Project/index.html",
+    "main.3abf470d.css.map": "/SSW-555-Team-6-Project/static/css/main.3abf470d.css.map",
+    "main.414f569e.js.map": "/SSW-555-Team-6-Project/static/js/main.414f569e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3abf470d.css",
+    "static/js/main.414f569e.js"
+  ]
+}
