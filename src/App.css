@@ -1985,3 +1985,238 @@ body {
   color: #64748b;
   margin-top: 4px;
 }
+/* Discussion Board */
+.discussion-board-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.discussion-board-header .announcements-title {
+  margin-bottom: 0;
+}
+
+.discussion-new-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.discussion-new-btn:hover {
+  opacity: 0.85;
+}
+
+.discussion-new-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #0f1117;
+  border-radius: 10px;
+  border: 1px solid #2a2d3e;
+}
+
+.discussion-textarea {
+  background: #0f1117;
+  border: 1px solid #2a2d3e;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 14px;
+  padding: 10px 14px;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.discussion-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+.discussion-submit-btn {
+  align-self: flex-end;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.discussion-submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.discussion-submit-btn:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+.discussion-thread-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.discussion-thread-card {
+  width: 100%;
+  text-align: left;
+  background: #0f1117;
+  border: 1px solid #2a2d3e;
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  color: #e2e8f0;
+}
+
+.discussion-thread-card:hover {
+  background: #1a1d2e;
+  border-color: #3a3d5e;
+}
+
+.discussion-thread-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.discussion-thread-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.discussion-thread-card-preview {
+  font-size: 13px;
+  color: #94a3b8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.discussion-author {
+  font-size: 13px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.discussion-date {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.discussion-reply-count {
+  font-size: 12px;
+  color: #64748b;
+  margin-left: auto;
+}
+
+.discussion-instructor-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: #6366f122;
+  color: #818cf8;
+  border: 1px solid #6366f144;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+/* Thread detail view */
+.discussion-back-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  transition: color 0.15s;
+}
+
+.discussion-back-btn:hover {
+  color: #e2e8f0;
+}
+
+.discussion-thread-header {
+  background: #0f1117;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.discussion-thread-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.discussion-thread-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.discussion-thread-body {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.discussion-replies-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.discussion-replies-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.discussion-reply {
+  background: #0f1117;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.discussion-reply-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.discussion-reply-body {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.discussion-reply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #2a2d3e;
+}

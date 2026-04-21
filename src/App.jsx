@@ -30,6 +30,7 @@ export default function App() {
   const [quizResults, setQuizResults] = useState(INITIAL_RESULTS);
   const [studentResponses, setStudentResponses] = useState({});
   const [events, setEvents] = useState(EVENTS);
+  const [discussions, setDiscussions] = useState({});
   const [newCourse, setNewCourse] = useState({
     name: "",
     code: "",
@@ -246,6 +247,22 @@ export default function App() {
     setQuizResults((prev) => [...prev, result]);
   };
 
+  const addThread = (courseId, thread) => {
+    setDiscussions((prev) => ({
+      ...prev,
+      [courseId]: [thread, ...(prev[courseId] || [])],
+    }));
+  };
+
+  const addReply = (courseId, threadId, reply) => {
+    setDiscussions((prev) => ({
+      ...prev,
+      [courseId]: (prev[courseId] || []).map((t) =>
+        t.id === threadId ? { ...t, replies: [...t.replies, reply] } : t,
+      ),
+    }));
+  };
+
   if (showCalendar && role === "student") {
     return (
       <div>
@@ -333,6 +350,10 @@ export default function App() {
           onSaveResult={saveQuizResult}
           recordings={recordings}
           onAddRecording={addRecording}
+          discussions={discussions}
+          currentUser={user.name}
+          onAddThread={addThread}
+          onAddReply={addReply}
         />
       </div>
     );

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import Icon from "./Icon";
 import QuizPanel from "./QuizPanel";
 import RecordingsPanel from "./RecordingsPanel";
+import DiscussionBoard from "./DiscussionBoard";
 
 const FILE_ICONS = {
   pdf: "📄",
@@ -47,6 +48,10 @@ const CourseDetail = ({
   onSubmitAnswer,
   recordings,
   onAddRecording,
+  discussions,
+  currentUser,
+  onAddThread,
+  onAddReply,
 }) => {
   const c = course;
   const [newAnnouncement, setNewAnnouncement] = useState("");
@@ -238,6 +243,17 @@ const CourseDetail = ({
           onSubmitAnswer={onSubmitAnswer}
           onSaveResult={onSaveResult}
           recordings={(recordings || []).filter((r) => r.courseId === c.id)}
+        />
+
+        {/* Discussion Board */}
+        <DiscussionBoard
+          courseId={c.id}
+          courseColor={c.color}
+          threads={discussions}
+          currentUser={currentUser}
+          currentRole={role}
+          onAddThread={onAddThread}
+          onAddReply={onAddReply}
         />
 
         {/* Announcements */}
