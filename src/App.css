@@ -512,6 +512,30 @@ body {
   font-size: 14px;
 }
 
+.announcement-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.delete-announcement-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.delete-announcement-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
 .empty-text {
   color: #64748b;
   text-align: center;
@@ -539,6 +563,10 @@ body {
   border: 1px solid #6366f1;
   padding: 24px;
   margin-bottom: 24px;
+}
+
+.new-event-form {
+  padding: 24px;
 }
 
 .form-header {
@@ -678,6 +706,22 @@ body {
 .back-btn:hover {
   background: #2a2d3e;
   color: #e2e8f0;
+}
+
+.add-event-btn {
+  background: #6366f1;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.add-event-btn:hover {
+  background: #4f46e5;
 }
 
 .calendar-title {
@@ -950,12 +994,34 @@ body {
   margin-bottom: 8px;
 }
 
+.event-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .event-title {
   font-size: 13px;
   font-weight: 700;
   margin: 0;
   line-height: 1.3;
   flex: 1;
+}
+
+.delete-event-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.delete-event-btn:hover {
+  background: #ef4444;
+  color: white;
 }
 
 .event-type-badge {

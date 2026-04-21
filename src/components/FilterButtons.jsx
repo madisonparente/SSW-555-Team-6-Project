@@ -6,7 +6,8 @@ const FilterButtons = ({ selectedFilter, onFilterChange }) => {
     { key: "class", label: "Classes" },
     { key: "tutoring", label: "Tutoring" },
     { key: "deadline", label: "Deadlines" },
-    { key: "office-hours", label: "Office Hours" }
+    { key: "office-hours", label: "Office Hours" },
+    { key: "other", label: "Other" }
   ];
 
   return (

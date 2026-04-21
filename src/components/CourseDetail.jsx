@@ -36,6 +36,7 @@ const CourseDetail = ({
   onBack,
   role,
   onAddAnnouncement,
+  onDeleteAnnouncement,
   onAddFiles,
   quizzes,
   studentResponses,
@@ -265,15 +266,30 @@ const CourseDetail = ({
           {c.announcements.length === 0 ? (
             <p className="empty-text">No announcements yet.</p>
           ) : (
-            c.announcements.map((a, i) => (
-              <div
-                key={i}
-                className="announcement-item"
-                style={{ borderLeft: `3px solid ${c.color}` }}
-              >
-                {a}
-              </div>
-            ))
+            c.announcements.map((a, i) => {
+              const announcementId = typeof a === 'string' ? null : a.id;
+              const announcementText = typeof a === 'string' ? a : a.text;
+              return (
+                <div
+                  key={i}
+                  className="announcement-item"
+                  style={{ borderLeft: `3px solid ${c.color}` }}
+                >
+                  <div className="announcement-content">
+                    <span>{announcementText}</span>
+                    {role === "teacher" && announcementId && onDeleteAnnouncement && (
+                      <button
+                        className="delete-announcement-btn"
+                        onClick={() => onDeleteAnnouncement(c.id, announcementId)}
+                        title="Delete announcement"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })
           )}
         </div>
       </div>

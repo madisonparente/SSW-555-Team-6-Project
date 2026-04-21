@@ -1,7 +1,7 @@
 import React from "react";
 import EventCard from "./EventCard";
 
-const EventModal = ({ selectedDate, events, selectedFilter, onClose, getEventsForDate, getEventTypeColor, getEventTypeLabel }) => {
+const EventModal = ({ selectedDate, events, selectedFilter, onClose, getEventsForDate, getEventTypeColor, getEventTypeLabel, onDeleteEvent }) => {
   if (!selectedDate) return null;
 
   const dateEvents = getEventsForDate(selectedDate);
@@ -28,6 +28,7 @@ const EventModal = ({ selectedDate, events, selectedFilter, onClose, getEventsFo
                 getEventTypeColor={getEventTypeColor}
                 getEventTypeLabel={getEventTypeLabel}
                 isModal={true}
+                onDelete={() => onDeleteEvent(event.id)}
               />
             ))
           )}
