@@ -55,7 +55,7 @@ const CourseCard = ({ course, onClick }) => {
             className="card-announcement"
             style={{ borderLeft: `3px solid ${c.color}` }}
           >
-            📌 {c.announcements[0]}
+            📌 {typeof c.announcements[0] === 'string' ? c.announcements[0] : c.announcements[0].text}
           </div>
         )}
       </div>

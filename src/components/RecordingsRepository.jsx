@@ -13,7 +13,7 @@ const RecordingsRepository = ({ recordings, courses, onBack }) => {
   let filtered = recordings;
 
   if (courseFilter !== "all") {
-    filtered = filtered.filter((r) => r.courseId === Number(courseFilter));
+    filtered = filtered.filter((r) => String(r.courseId) === String(courseFilter));
   }
 
   if (search.trim()) {
