@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import Header from "./components/Header";
 import CourseCard from "./components/CourseCard";
 import CourseDetail from "./components/CourseDetail";
@@ -7,19 +7,17 @@ import CalendarView from "./components/CalendarView";
 import StudentDashboard from "./components/StudentDashboard";
 import StudySessionPanel from "./components/StudySessionPanel";
 import RecordingsRepository from "./components/RecordingsRepository";
+import INITIAL_COURSES from "./data/courses";
+import INITIAL_QUIZZES from "./data/quizzes";
+import INITIAL_RECORDINGS from "./data/recordings";
 import USERS from "./data/users";
-import * as coursesApi from "./api/coursesApi";
-import * as eventsApi from "./api/eventsApi";
-import * as quizzesApi from "./api/quizzesApi";
-import * as recordingsApi from "./api/recordingsApi";
-import * as quizResultsApi from "./api/quizResultsApi";
-import * as discussionsApi from "./api/discussionsApi";
-import * as studySessionsApi from "./api/studySessionsApi";
+import EVENTS from "./data/events";
+import INITIAL_RESULTS from "./data/results";
 import "./App.css";
 
 export default function App() {
   const [role, setRole] = useState("student");
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState(INITIAL_COURSES);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showNewCourse, setShowNewCourse] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -27,13 +25,12 @@ export default function App() {
   const [showStudyGroups, setShowStudyGroups] = useState(false);
   const [studySessions, setStudySessions] = useState([]);
   const [showRecordings, setShowRecordings] = useState(false);
-  const [quizzes, setQuizzes] = useState([]);
-  const [recordings, setRecordings] = useState([]);
-  const [quizResults, setQuizResults] = useState([]);
+  const [quizzes, setQuizzes] = useState(INITIAL_QUIZZES);
+  const [recordings, setRecordings] = useState(INITIAL_RECORDINGS);
+  const [quizResults, setQuizResults] = useState(INITIAL_RESULTS);
   const [studentResponses, setStudentResponses] = useState({});
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState(EVENTS);
   const [discussions, setDiscussions] = useState({});
-  const [loading, setLoading] = useState(true);
   const [newCourse, setNewCourse] = useState({
     name: "",
     code: "",
@@ -50,44 +47,6 @@ export default function App() {
     meetLink: "",
   });
   const user = USERS[role];
-
-  // Fetch all data on mount
-  useEffect(() => {
-    Promise.all([
-      coursesApi.fetchCourses(),
-      eventsApi.fetchEvents(),
-      quizzesApi.fetchQuizzes(),
-      recordingsApi.fetchRecordings(),
-      quizResultsApi.fetchQuizResults(),
-      studySessionsApi.fetchStudySessions(),
-    ])
-      .then(([c, e, q, r, qr, ss]) => {
-        setCourses(c);
-        setEvents(e);
-        setQuizzes(q);
-        setRecordings(r);
-        setQuizResults(qr);
-        setStudySessions(ss);
-      })
-      .catch((err) => console.error("Failed to load data:", err))
-      .finally(() => setLoading(false));
-  }, []);
-
-  // Fetch discussions when selectedCourse changes
-  const fetchDiscussionsForCourse = useCallback(async (courseId) => {
-    try {
-      const threads = await discussionsApi.fetchDiscussions(courseId);
-      setDiscussions((prev) => ({ ...prev, [courseId]: threads }));
-    } catch (err) {
-      console.error("Failed to load discussions:", err);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (selectedCourse) {
-      fetchDiscussionsForCourse(selectedCourse);
-    }
-  }, [selectedCourse, fetchDiscussionsForCourse]);
 
   const totalAnnouncements = courses.reduce(
     (sum, c) => sum + c.announcements.length,
@@ -134,16 +93,11 @@ export default function App() {
     setSelectedCourse(null);
   };
 
-  const addStudySession = async (session) => {
-    try {
-      const saved = await studySessionsApi.createStudySession(session);
-      setStudySessions((prev) => [saved, ...prev]);
-    } catch (err) {
-      console.error("Failed to create study session:", err);
-    }
+  const addStudySession = (session) => {
+    setStudySessions((prev) => [session, ...prev]);
   };
 
-  const addCourse = async () => {
+  const addCourse = () => {
     if (!newCourse.name || !newCourse.code) return;
     const colors = [
       "#6366f1",
@@ -154,137 +108,132 @@ export default function App() {
       "#ef4444",
       "#06b6d4",
     ];
-    try {
-      const saved = await coursesApi.createCourse({
+    setCourses((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
         ...newCourse,
         teacher: user.name,
         color: colors[Math.floor(Math.random() * colors.length)],
         students: 0,
         announcements: [],
-      });
-      setCourses((prev) => [...prev, saved]);
-      setNewCourse({ name: "", code: "", schedule: "", meetLink: "" });
-      setShowNewCourse(false);
-    } catch (err) {
-      console.error("Failed to create course:", err);
-    }
+      },
+    ]);
+    setNewCourse({ name: "", code: "", schedule: "", meetLink: "" });
+    setShowNewCourse(false);
   };
 
-  const addEvent = async () => {
+  const addEvent = () => {
     if (!newEvent.type || !newEvent.title || !newEvent.date) return;
-    try {
-      const saved = await eventsApi.createEvent({
+    setEvents((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
         ...newEvent,
-        courseId: null,
+        courseId: null, // Since it's added by student, no specific course
         courseName: "",
         courseCode: "",
         dayOfWeek: new Date(newEvent.date).toLocaleDateString('en-US', { weekday: 'long' }),
-      });
-      setEvents((prev) => [...prev, saved]);
-      setNewEvent({
-        type: "",
-        title: "",
-        date: "",
-        startTime: "",
-        endTime: "",
-        location: "",
-        meetLink: "",
-      });
-    } catch (err) {
-      console.error("Failed to create event:", err);
-    }
+      },
+    ]);
+    setNewEvent({
+      type: "",
+      title: "",
+      date: "",
+      startTime: "",
+      endTime: "",
+      location: "",
+      meetLink: "",
+    });
   };
 
-  const deleteEvent = async (eventId) => {
-    try {
-      await eventsApi.deleteEvent(eventId);
-      setEvents((prev) => prev.filter((event) => event.id !== eventId));
-    } catch (err) {
-      console.error("Failed to delete event:", err);
-    }
+  const deleteEvent = (eventId) => {
+    setEvents((prev) => prev.filter((event) => event.id !== eventId));
   };
 
-  const addAnnouncement = async (courseId, text) => {
-    try {
-      const updated = await coursesApi.addAnnouncement(courseId, text);
-      setCourses((prev) => prev.map((c) => (c.id === courseId ? updated : c)));
-    } catch (err) {
-      console.error("Failed to add announcement:", err);
-    }
+  const addAnnouncement = (courseId, text) => {
+    setCourses((prev) =>
+      prev.map((c) =>
+        c.id === courseId
+          ? { ...c, announcements: [{ id: Date.now(), text }, ...c.announcements] }
+          : c,
+      ),
+    );
   };
 
-  const deleteAnnouncement = async (courseId, announcementId) => {
-    try {
-      const updated = await coursesApi.deleteAnnouncement(courseId, announcementId);
-      setCourses((prev) => prev.map((c) => (c.id === courseId ? updated : c)));
-    } catch (err) {
-      console.error("Failed to delete announcement:", err);
-    }
+  const deleteAnnouncement = (courseId, announcementId) => {
+    setCourses((prev) =>
+      prev.map((c) =>
+        c.id === courseId
+          ? {
+              ...c,
+              announcements: c.announcements.filter((a) => {
+                const aId = typeof a === 'string' ? null : a.id;
+                return aId !== announcementId;
+              }),
+            }
+          : c,
+      ),
+    );
   };
 
-  const addFiles = async (courseId, newFiles) => {
-    try {
-      const updated = await coursesApi.addFiles(courseId, newFiles);
-      setCourses((prev) => prev.map((c) => (c.id === courseId ? updated : c)));
-    } catch (err) {
-      console.error("Failed to add files:", err);
-    }
+  const addFiles = (courseId, newFiles) => {
+    setCourses((prev) =>
+      prev.map((c) =>
+        c.id === courseId
+          ? { ...c, files: [...(c.files || []), ...newFiles] }
+          : c,
+      ),
+    );
   };
 
-  const createQuiz = async (courseId, title, questions) => {
-    try {
-      const saved = await quizzesApi.createQuiz({
+  const createQuiz = (courseId, title, questions) => {
+    setQuizzes((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
         courseId,
         title,
         status: "inactive",
         currentQuestionIndex: 0,
-        questions: questions.map((q) => ({ ...q })),
-      });
-      setQuizzes((prev) => [...prev, saved]);
-    } catch (err) {
-      console.error("Failed to create quiz:", err);
-    }
+        questions: questions.map((q, i) => ({ ...q, id: Date.now() + i })),
+      },
+    ]);
   };
 
-  const launchQuiz = async (quizId) => {
-    try {
-      const updated = await quizzesApi.launchQuiz(quizId);
-      setQuizzes((prev) => prev.map((q) => (q.id === quizId ? updated : q)));
-      setStudentResponses((prev) => {
-        const next = { ...prev };
-        delete next[quizId];
-        return next;
-      });
-    } catch (err) {
-      console.error("Failed to launch quiz:", err);
-    }
+  const launchQuiz = (quizId) => {
+    setQuizzes((prev) =>
+      prev.map((q) =>
+        q.id === quizId ? { ...q, status: "active", currentQuestionIndex: 0 } : q,
+      ),
+    );
+    setStudentResponses((prev) => {
+      const next = { ...prev };
+      delete next[quizId];
+      return next;
+    });
   };
 
-  const advanceQuestion = async (quizId) => {
-    try {
-      const updated = await quizzesApi.advanceQuiz(quizId);
-      setQuizzes((prev) => prev.map((q) => (q.id === quizId ? updated : q)));
-    } catch (err) {
-      console.error("Failed to advance question:", err);
-    }
+  const advanceQuestion = (quizId) => {
+    setQuizzes((prev) =>
+      prev.map((q) =>
+        q.id === quizId
+          ? { ...q, currentQuestionIndex: q.currentQuestionIndex + 1 }
+          : q,
+      ),
+    );
   };
 
-  const endQuiz = async (quizId) => {
-    try {
-      const updated = await quizzesApi.endQuiz(quizId);
-      setQuizzes((prev) => prev.map((q) => (q.id === quizId ? updated : q)));
-    } catch (err) {
-      console.error("Failed to end quiz:", err);
-    }
+  const endQuiz = (quizId) => {
+    setQuizzes((prev) =>
+      prev.map((q) =>
+        q.id === quizId ? { ...q, status: "finished" } : q,
+      ),
+    );
   };
 
-  const addRecording = async (courseId, recording) => {
-    try {
-      const saved = await recordingsApi.createRecording({ ...recording, courseId });
-      setRecordings((prev) => [saved, ...prev]);
-    } catch (err) {
-      console.error("Failed to add recording:", err);
-    }
+  const addRecording = (courseId, recording) => {
+    setRecordings((prev) => [{ ...recording, courseId }, ...prev]);
   };
 
   const submitAnswer = (quizId, questionId, selectedIndex) => {
@@ -294,51 +243,25 @@ export default function App() {
     }));
   };
 
-  const saveQuizResult = async (result) => {
-    try {
-      const saved = await quizResultsApi.createQuizResult(result);
-      setQuizResults((prev) => [...prev, saved]);
-    } catch (err) {
-      console.error("Failed to save quiz result:", err);
-    }
+  const saveQuizResult = (result) => {
+    setQuizResults((prev) => [...prev, result]);
   };
 
-  const addThread = async (courseId, thread) => {
-    try {
-      const saved = await discussionsApi.createDiscussion({
-        ...thread,
-        courseId,
-      });
-      setDiscussions((prev) => ({
-        ...prev,
-        [courseId]: [saved, ...(prev[courseId] || [])],
-      }));
-    } catch (err) {
-      console.error("Failed to add thread:", err);
-    }
+  const addThread = (courseId, thread) => {
+    setDiscussions((prev) => ({
+      ...prev,
+      [courseId]: [thread, ...(prev[courseId] || [])],
+    }));
   };
 
-  const addReply = async (courseId, threadId, reply) => {
-    try {
-      const updated = await discussionsApi.addReply(threadId, reply);
-      setDiscussions((prev) => ({
-        ...prev,
-        [courseId]: (prev[courseId] || []).map((t) =>
-          t.id === threadId ? updated : t,
-        ),
-      }));
-    } catch (err) {
-      console.error("Failed to add reply:", err);
-    }
+  const addReply = (courseId, threadId, reply) => {
+    setDiscussions((prev) => ({
+      ...prev,
+      [courseId]: (prev[courseId] || []).map((t) =>
+        t.id === threadId ? { ...t, replies: [...t.replies, reply] } : t,
+      ),
+    }));
   };
-
-  if (loading) {
-    return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <p>Loading ClassLink...</p>
-      </div>
-    );
-  }
 
   if (showCalendar && role === "student") {
     return (
@@ -355,8 +278,8 @@ export default function App() {
           onRecordingsClick={handleRecordingsClick}
           showRecordings={showRecordings}
         />
-        <CalendarView
-          events={events}
+        <CalendarView 
+          events={events} 
           onBack={handleCalendarClick}
           newEvent={newEvent}
           setNewEvent={setNewEvent}

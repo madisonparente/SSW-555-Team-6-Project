@@ -1,6 +1,8 @@
 import React from "react";
 import { getRecommendationsForResult } from "../utils/getRecommendations";
 
+const attendanceEventIds = [1, 2, 3, 5, 6, 9];
+
 const getUpcomingMilestones = (events) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -24,7 +26,7 @@ const StudentDashboard = ({ studentId, events, results = [], quizzes = [], recor
     ? Math.max(...studentResults.map((result) => result.percentage))
     : 0;
   const classEvents = events.filter((event) => event.type === "class");
-  const attended = classEvents.filter((event) => event.attended).length;
+  const attended = classEvents.filter((event) => attendanceEventIds.includes(event.id)).length;
   const attendanceRate = classEvents.length
     ? Math.round((attended / classEvents.length) * 100)
     : 0;
